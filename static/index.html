@@ -105,24 +105,16 @@
       <!-- Input Column -->
       <div class="lg:col-span-7 space-y-6">
         
-        <!-- Sample Archives Quick-Select -->
+        <!-- Sample Archives Quick-Select Grid -->
         <div class="bg-slate-900/60 rounded-xl p-4 border border-slate-800">
-          <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-2.5">
-            ⚡ Quick-Load Sample Heritage Archives:
-          </label>
-          <div class="grid grid-cols-3 gap-2.5">
-            <button onclick="loadSample('1')" class="text-left p-2.5 rounded-lg bg-slate-800/80 hover:bg-amber-950/40 border border-slate-700/60 hover:border-amber-500/50 transition">
-              <div class="text-xs font-semibold text-slate-200">Brihadisvara Temple</div>
-              <div class="text-[11px] text-amber-400/80">Guided Tour • Chola 1010 CE</div>
-            </button>
-            <button onclick="loadSample('2')" class="text-left p-2.5 rounded-lg bg-slate-800/80 hover:bg-amber-950/40 border border-slate-700/60 hover:border-amber-500/50 transition">
-              <div class="text-xs font-semibold text-slate-200">The Burning of Nalanda</div>
-              <div class="text-[11px] text-amber-400/80">Podcast • Dharmaganja 1193 CE</div>
-            </button>
-            <button onclick="loadSample('3')" class="text-left p-2.5 rounded-lg bg-slate-800/80 hover:bg-amber-950/40 border border-slate-700/60 hover:border-amber-500/50 transition">
-              <div class="text-xs font-semibold text-slate-200">Rani Velu Nachiyar</div>
-              <div class="text-[11px] text-amber-400/80">Oral Story • Sivaganga 1780</div>
-            </button>
+          <div class="flex items-center justify-between mb-3">
+            <label class="text-xs font-semibold text-amber-300 uppercase tracking-wider">
+              🏛️ Explore Curated Heritage Archives:
+            </label>
+            <span class="text-[11px] text-slate-400">Click any archive to preview summary & audio</span>
+          </div>
+          <div id="samples-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+            <!-- Dynamically populated from /api/samples -->
           </div>
         </div>
 
@@ -370,36 +362,82 @@
   <script>
     let samples = {};
 
+    let activeSampleKey = '1';
+
     // Load samples on init
     async function init() {
       try {
         const res = await fetch('/api/samples');
         samples = await res.json();
-        // Load sample 1 by default
+        renderSamplesGrid();
         loadSample('1');
       } catch (err) {
         console.error('Failed to load samples:', err);
       }
     }
 
-    function switchTab(tabId) {
-      const tabs = ['stories', 'archives', 'translate'];
-      tabs.forEach(t => {
-        const el = document.getElementById(`tab-${t}`);
-        const btn = document.getElementById(`tab-${t}-btn`);
-        if (t === tabId) {
-          el.classList.remove('hidden');
-          btn.className = 'px-5 py-3 text-sm font-semibold border-b-2 border-amber-400 text-amber-300 flex items-center space-x-2 transition';
-        } else {
-          el.classList.add('hidden');
-          btn.className = 'px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition';
-        }
-      });
+    function renderSamplesGrid() {
+      const grid = document.getElementById('samples-grid');
+      grid.innerHTML = '';
+      
+      const categoryIcons = {
+        'Ancient Knowledge': '📚',
+        'Architectural Wonder': '🏛️',
+        'Sacred Astronomy': '☀️',
+        'Imperial Splendor': '👑',
+        'Warrior Legends': '⚔️',
+        'Ancient Civilizations': '🏺',
+      };
+
+      for (const [key, s] of Object.entries(samples)) {
+        const icon = categoryIcons[s.category] || '📜';
+        const hasAudio = !!s.audio_url;
+        
+        const card = document.createElement('button');
+        card.id = `sample-btn-${key}`;
+        card.onclick = () => loadSample(key);
+        card.className = `text-left p-3 rounded-xl border transition flex flex-col justify-between ${
+          key === activeSampleKey
+            ? 'bg-amber-950/50 border-amber-500 shadow-md shadow-amber-500/10'
+            : 'bg-slate-950/70 border-slate-800/80 hover:border-amber-500/40 hover:bg-slate-900/60'
+        }`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-amber-300 font-medium">${icon} ${s.category || 'Archive'}</span>
+              ${hasAudio ? '<span class="text-[10px] text-emerald-400 flex items-center space-x-0.5 font-medium"><span>🎧</span><span>Audio</span></span>' : ''}
+            </div>
+            <div class="text-xs font-bold text-slate-100 line-clamp-1 mb-1">${s.title}</div>
+            <div class="text-[10px] text-slate-400 line-clamp-1">${s.period || ''}</div>
+          </div>
+          <div class="mt-2 pt-1.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-amber-400/90 font-medium">
+            <span>Format: ${s.suggested_format?.toUpperCase()}</span>
+            <span>${hasAudio ? 'Preview Ready ⚡' : 'Interactive ✨'}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      }
     }
 
     function loadSample(key) {
+      activeSampleKey = key;
       const s = samples[key];
       if (!s) return;
+
+      // Update card selection styling
+      for (const k of Object.keys(samples)) {
+        const btn = document.getElementById(`sample-btn-${k}`);
+        if (btn) {
+          if (k === key) {
+            btn.className = 'text-left p-3 rounded-xl border bg-amber-950/50 border-amber-500 shadow-md shadow-amber-500/10 transition flex flex-col justify-between';
+          } else {
+            btn.className = 'text-left p-3 rounded-xl border bg-slate-950/70 border-slate-800/80 hover:border-amber-500/40 hover:bg-slate-900/60 transition flex flex-col justify-between';
+          }
+        }
+      }
+
+      // Populate text & character count
       document.getElementById('story-content').value = s.source;
       document.getElementById('char-count').innerText = `${s.source.length} characters`;
 
@@ -409,10 +447,35 @@
         r.checked = (r.value === s.suggested_format);
       }
 
-      // Pre-select language for demo
-      if (key === '1') document.getElementById('story-language').value = 'hi-IN';
-      if (key === '2') document.getElementById('story-language').value = 'en-IN';
-      if (key === '3') document.getElementById('story-language').value = 'ta-IN';
+      // Pre-select suggested language
+      if (s.suggested_language) {
+        document.getElementById('story-language').value = s.suggested_language;
+      }
+
+      // If there is a pre-built summary, display it immediately
+      const scriptText = document.getElementById('script-text');
+      const outputTitle = document.getElementById('output-title');
+      const badge = document.getElementById('output-badge');
+      const audioBox = document.getElementById('audio-player-box');
+      const player = document.getElementById('audio-player');
+      const downloadBtn = document.getElementById('download-audio-btn');
+
+      if (s.prebuilt_summary) {
+        scriptText.innerText = s.prebuilt_summary;
+        outputTitle.innerText = `${s.suggested_format.toUpperCase()} • Pre-built Summary`;
+        badge.innerText = `${s.region || 'Curated Archive'}`;
+        badge.className = 'text-[11px] px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30';
+      }
+
+      // If pre-rendered audio exists, load audio player
+      if (s.audio_url) {
+        player.src = s.audio_url;
+        downloadBtn.href = s.audio_url;
+        audioBox.classList.remove('hidden');
+      } else {
+        audioBox.classList.add('hidden');
+        player.pause();
+      }
     }
 
     document.getElementById('story-content').addEventListener('input', (e) => {

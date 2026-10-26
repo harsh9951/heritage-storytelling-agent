@@ -244,7 +244,10 @@ class HeritageStorytellingAgent:
 # =============================================================================
 SAMPLE_HERITAGE_ARCHIVES = {
     "1": {
-        "title": "Brihadisvara Temple (Thanjavur)",
+        "title": "Brihadisvara Temple: The Granite Marvel",
+        "category": "Architectural Wonder",
+        "period": "1010 CE • Chola Dynasty",
+        "region": "Thanjavur, Tamil Nadu",
         "source": (
             "Inscriptions from 1010 CE record that Emperor Raja Raja Chola I built the Great "
             "Brihadisvara Temple dedicated to Lord Shiva. The temple vimana rises 66 meters into the sky, "
@@ -253,9 +256,20 @@ SAMPLE_HERITAGE_ARCHIVES = {
             "Tamil inscriptions recording names of musicians, dancers, stone carvers, and royal decrees."
         ),
         "suggested_format": "tour",
+        "suggested_language": "hi-IN",
+        "audio_url": "/audio/showcase_1_hi-IN.wav",
+        "prebuilt_summary": (
+            "देवताओं के नगर तंजावुर में आपका हार्दिक स्वागत है। अपनी आँखें उठाएँ और इस भव्य गोपुरम की ओर देखें, "
+            "जिसकी ऊँचाई आसमान को छूती है। सन् १०१० ईस्वी के शिलालेख हमें बताते हैं कि महान चोल सम्राट राजराजा चोल प्रथम "
+            "ने भगवान शिव को समर्पित यह महाप्रभु बृहदीश्वर मंदिर बनवाया था। इस मंदिर का विमाना ६६ मीटर की ऊँचाई तक "
+            "स्वर्ग की ओर उठ रहा है, जिसके शिखर पर ८० टन का कुम्भ विराजमान है। आइए, इस शाश्वत विरासत के भीतर कदम रखें।"
+        ),
     },
     "2": {
-        "title": "Nalanda Mahavihara: The Burning of Dharmaganja",
+        "title": "The Burning of Nalanda Mahavihara",
+        "category": "Ancient Knowledge",
+        "period": "1193 CE • Magadha",
+        "region": "Nalanda, Bihar",
         "source": (
             "In 1193-1200 CE, the great Mahavihara of Nalanda—where 10,000 scholars studied—was sacked "
             "and set ablaze by the army of Bakhtiyar Khilji, as recorded in Minhaj-i-Siraj's chronicle Tabaqat-i Nasiri. "
@@ -266,16 +280,99 @@ SAMPLE_HERITAGE_ARCHIVES = {
             "Rahula Shribhadra, still teaching a solitary pupil amidst the blackened ruins and fallen pillars."
         ),
         "suggested_format": "podcast",
+        "suggested_language": "en-IN",
+        "audio_url": "/audio/podcast_en-IN_27d4486d.wav",
+        "prebuilt_summary": (
+            "Imagine a sky darkened not by storm, but by the ashes of human genius. Welcome to Echoes of History. "
+            "Picture the year 1200 CE. In the heart of Magadha stood Nalanda, the intellectual pulse of Asia. "
+            "Its fabled library, Dharmaganja, held three soaring monuments named Ratnasagara, Ratnaranjaka, and Ratnodadhi. "
+            "When Khilji's forces set the sacred halls ablaze, the fire raged for three months. Decades later, Tibetan pilgrim "
+            "Dharmasvamin found a 90-year-old master, Rahula Shribhadra, still teaching one solitary pupil amidst the ashes."
+        ),
     },
     "3": {
-        "title": "Legend of Rani Velu Nachiyar (Sivaganga)",
+        "title": "Konark Sun Temple: The Cosmic Chariot",
+        "category": "Sacred Astronomy",
+        "period": "13th Century CE • Eastern Ganga Dynasty",
+        "region": "Konark, Odisha",
         "source": (
-            "Oral ballads of Tamil Nadu remember Rani Velu Nachiyar, the warrior queen of Sivaganga. "
-            "In 1780, she formed an alliance with Hyder Ali and built one of the earliest recorded women’s "
-            "regiments, the Udayal army, led by Commander Kuyili. Dressed in battle armor and carrying dual "
-            "valaris (throwing sickles), the queen recaptured her fortress, reclaiming freedom for her people."
+            "Conceived by King Narasimhadeva I, the Konark Sun Temple was engineered as a colossal 24-wheeled "
+            "stone chariot of Surya, pulled by seven galloping steeds representing the days of the week. Its giant "
+            "wheels serve as precision astronomical sundials, where the shadow of the central axle across carved "
+            "beads measures exact time to the minute. Folklore immortalizes the young 12-year-old Dharmapada, who "
+            "engineered the placement of the crowning kalasa cupola to save twelve hundred master craftsmen."
+        ),
+        "suggested_format": "podcast",
+        "suggested_language": "hi-IN",
+        "audio_url": "/audio/podcast_hi-IN_konark.wav",
+        "prebuilt_summary": (
+            "क्या आप कल्पना कर सकते हैं एक ऐसा मंदिर जो केवल पत्थरों से नहीं, बल्कि समय और ब्रह्मांडीय गति से बुना गया हो? "
+            "ओडिशा के समुद्र तट पर स्थित कोणार्क सूर्य मंदिर भगवान सूर्य का एक विशाल रथ है। इसके २४ पहिए साधारण नक्काशी नहीं, "
+            "बल्कि सटीक धूपघड़ियाँ हैं। यह गाथा है सम्राट नरसिंहदेव प्रथम की और उस १२ वर्षीय बालक धर्मपद की, जिसने १२ सौ शिल्पियों "
+            "की रक्षा के लिए मंदिर के शिखर पर कलश स्थापित कर अमर बलिदान दिया।"
+        ),
+    },
+    "4": {
+        "title": "Hampi & the Musical Pillars of Vijayanagara",
+        "category": "Imperial Splendor",
+        "period": "15th–16th Century CE • Vijayanagara Empire",
+        "region": "Hampi, Karnataka",
+        "source": (
+            "Along the boulders of the Tungabhadra River, Hampi flourished as the world's second-largest medieval city. "
+            "The Vittala Temple's Ranga Mandapa houses 56 monolithic granite musical pillars that resonate with distinct "
+            "swaras (musical notes) when tapped. Portuguese chronicles by Domingo Paes in 1520 CE describe vast street bazaars "
+            "where rubies, diamonds, emeralds, and pearls were sold by the bushel in the shadow of Emperor Krishnadevaraya's palace."
+        ),
+        "suggested_format": "tour",
+        "suggested_language": "en-IN",
+        "audio_url": "/audio/tour_en-IN_hampi.wav",
+        "prebuilt_summary": (
+            "Stand before the towering stone gateway of the Vittala Temple and listen closely. You are entering Hampi, "
+            "the jewel of the Vijayanagara Empire. Look toward the Ranga Mandapa: these 56 monolithic granite pillars "
+            "were tuned by master sculptors to ring like bronze bells with musical swaras. Five hundred years ago, "
+            "Domingo Paes walked these stone streets, watching merchants trade emeralds and pearls like grains in the market."
+        ),
+    },
+    "5": {
+        "title": "Legend of Rani Velu Nachiyar & the Kuyili Army",
+        "category": "Warrior Legends",
+        "period": "1780 CE • Sivaganga Kingdom",
+        "region": "Sivaganga, Tamil Nadu",
+        "source": (
+            "Tamil ballads celebrate Rani Velu Nachiyar, the first Indian queen to wage successful warfare against "
+            "the British East India Company. Trained in silambam martial arts, archery, and horse riding, she allied "
+            "with Hyder Ali and formed the Udayal regiment—an all-women army. In 1780, her commander Kuyili coated herself "
+            "in sacred ghee and oil, leaped into the British ammunition fortress in a suicide strike, winning back the kingdom."
         ),
         "suggested_format": "story",
+        "suggested_language": "ta-IN",
+        "audio_url": None,
+        "prebuilt_summary": (
+            "சிவகங்கையின் வீர மங்கை ராணி வேலு நாச்சியாரின் வீர காவியம் இது. தனது நாட்டை ஆக்கிரமித்த ஆங்கிலேயர்களை வீழ்த்த "
+            "ஹைதர் அலியுடன் கைகோர்த்து, 'உடையாள்' என்ற முதல் பெண் ராணுவப் படையை உருவாக்கினார். தளபதி குயிலி தனது உடலில் தீ மூட்டி "
+            "ஆயுதக் கிடங்கை அழித்து தாய்நாட்டை மீட்ட வீர வரலாறு தமிழ் மண்ணில் என்றென்றும் நிலைத்து நிற்கும்."
+        ),
+    },
+    "6": {
+        "title": "Dholavira: Harappan Hydraulic Engineering",
+        "category": "Ancient Civilizations",
+        "period": "2500 BCE • Indus Valley Civilization",
+        "region": "Great Rann of Kutch, Gujarat",
+        "source": (
+            "Excavations at Dholavira reveal an extraordinary 4,500-year-old Indus metropolis planned with geometric perfection. "
+            "To survive in an arid salt desert, Harappan engineers built 16 interconnected monumental stone reservoirs carved into "
+            "bedrock, with cascading check-dams and siltation chambers. At the northern citadel gate hangs the Dholavira Signboard: "
+            "ten giant crystalline gypsum characters representing one of humanity's earliest public written proclamations."
+        ),
+        "suggested_format": "podcast",
+        "suggested_language": "en-IN",
+        "audio_url": None,
+        "prebuilt_summary": (
+            "Step into the Great Rann of Kutch 4,500 years ago. Long before Rome built aqueducts, the engineers of Dholavira "
+            "carved sixteen monumental reservoirs directly into stone bedrock, collecting every drop of desert rainwater. "
+            "Here at the citadel gate, look up at the famous ten giant gypsum glyphs—an enigmatic message from our ancestors "
+            "that still awaits modern decipherment."
+        ),
     },
 }
 
