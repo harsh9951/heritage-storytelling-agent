@@ -54,9 +54,10 @@
       </div>
 
       <div class="flex items-center space-x-3 text-xs">
-        <div class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 shadow-sm">
+        <div class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 shadow-sm transition">
           <span>🪙</span>
-          <span>Credits: <strong id="credits-badge" class="font-mono text-amber-200 font-bold">50</strong></span>
+          <span>Credits: <strong id="credits-badge" class="font-mono text-amber-200 font-bold transition-all duration-300 inline-block">50</strong></span>
+          <button onclick="resetCredits()" title="Reset to 50 Live Credits" class="text-[10px] ml-1.5 px-1.5 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/40 text-amber-200 transition" aria-label="Reset Credits">↺</button>
         </div>
         <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -366,17 +367,42 @@
   <script>
     let samples = {};
     let activeSampleKey = '1';
-    let userCredits = parseInt(localStorage.getItem('heritage_credits') || '50', 10);
 
-    function updateCreditsDisplay() {
-      const badge = document.getElementById('credits-badge');
-      if (badge) badge.innerText = userCredits;
-      localStorage.setItem('heritage_credits', userCredits.toString());
+    async function fetchLiveCredits() {
+      try {
+        const res = await fetch('/api/credits');
+        const data = await res.json();
+        updateCreditsDisplay(data.credits);
+      } catch (err) {
+        console.error('Failed to fetch live credits:', err);
+      }
     }
 
-    // Load samples on init
+    function updateCreditsDisplay(amount) {
+      const badge = document.getElementById('credits-badge');
+      if (badge && amount !== undefined) {
+        if (badge.innerText !== String(amount)) {
+          badge.classList.add('text-amber-400', 'scale-125');
+          setTimeout(() => badge.classList.remove('text-amber-400', 'scale-125'), 300);
+        }
+        badge.innerText = amount;
+      }
+    }
+
+    async function resetCredits() {
+      try {
+        const res = await fetch('/api/credits/reset', { method: 'POST' });
+        const data = await res.json();
+        updateCreditsDisplay(data.credits);
+      } catch (err) {
+        alert('Failed to reset credits: ' + err.message);
+      }
+    }
+
+    // Load samples & live credits on init
     async function init() {
-      updateCreditsDisplay();
+      await fetchLiveCredits();
+      setInterval(fetchLiveCredits, 4000); // Live real-time polling
       try {
         const res = await fetch('/api/samples');
         samples = await res.json();
@@ -535,9 +561,10 @@
           throw new Error(data.error || 'Failed to generate experience');
         }
 
-        // Deduct credit
-        userCredits = Math.max(0, userCredits - 1);
-        updateCreditsDisplay();
+        // Live server credits update
+        if (data.credits_remaining !== undefined) {
+          updateCreditsDisplay(data.credits_remaining);
+        }
 
         // Render result
         document.getElementById('script-text').innerText = data.script;
@@ -587,6 +614,10 @@
         const data = await res.json();
         if (!data.success) throw new Error(data.error);
 
+        if (data.credits_remaining !== undefined) {
+          updateCreditsDisplay(data.credits_remaining);
+        }
+
         box.innerText = data.transcript;
         badge.innerText = `Language: ${data.detected_language || 'Detected'}`;
       } catch (err) {
@@ -622,6 +653,11 @@
         });
         const data = await res.json();
         if (!data.success) throw new Error(data.error);
+
+        if (data.credits_remaining !== undefined) {
+          updateCreditsDisplay(data.credits_remaining);
+        }
+
         out.innerText = data.translated_text;
       } catch (err) {
         out.innerText = 'Error: ' + err.message;

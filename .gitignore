@@ -18,5 +18,8 @@ heritage_output/*.wav
 heritage_output/*.mp3
 !heritage_output/.gitkeep
 
+# Live state
+credits.json
+
 # macOS
 .DS_Store
