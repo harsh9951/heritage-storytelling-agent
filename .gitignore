@@ -1,0 +1,22 @@
+# Environment variables (Never commit API keys!)
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Audio outputs
+heritage_output/*.wav
+heritage_output/*.mp3
+!heritage_output/.gitkeep
+
+# macOS
+.DS_Store

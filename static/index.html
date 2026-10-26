@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heritage Storyteller • Sarvam AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 10% 20%, rgb(20, 24, 38) 0%, rgb(11, 14, 23) 90.2%);
+    }
+    .heritage-font {
+      font-family: 'Cinzel', serif;
+    }
+    .glow-gold {
+      box-shadow: 0 0 25px -5px rgba(234, 179, 8, 0.25);
+    }
+    .gradient-border {
+      position: relative;
+      border: 1px solid rgba(234, 179, 8, 0.2);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(234, 179, 8, 0.2);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 antialiased selection:bg-amber-500 selection:text-slate-900">
+
+  <!-- Navbar -->
+  <header class="border-b border-amber-900/30 backdrop-blur-md bg-slate-950/60 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-300 flex items-center justify-center shadow-lg shadow-amber-500/20 text-slate-950 font-bold text-xl">
+          🏛️
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="heritage-font text-xl font-bold tracking-wider text-amber-200">HERITAGE STORYTELLER</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30">Sarvam AI</span>
+          </div>
+          <p class="text-xs text-slate-400">Oral Archives • Ancient Manuscripts • Multilingual Voice Narration</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Sarvam Indic Models Live</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-6 py-8">
+
+    <!-- Hero Banner -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900 to-amber-900/20 border border-amber-600/20 p-8 mb-8">
+      <div class="relative z-10 max-w-3xl">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-medium mb-3">
+          <span>✨ Powered by sarvam-105b, bulbul:v3, saaras:v3 & mayura:v1</span>
+        </div>
+        <h1 class="heritage-font text-3xl md:text-4xl font-extrabold text-amber-100 tracking-wide leading-tight mb-3">
+          Reimagining Living History Through Indic Voice
+        </h1>
+        <p class="text-sm md:text-base text-slate-300 leading-relaxed">
+          Transcribe oral memory recordings, translate ancient inscriptions, and transform raw historic archives into immersive <strong>guided walking tours</strong>, <strong>heritage podcasts</strong>, and <strong>dramatic stories</strong> narrated in rich Indian voices.
+        </p>
+      </div>
+      <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex space-x-2 border-b border-slate-800 mb-8">
+      <button id="tab-stories-btn" onclick="switchTab('stories')" class="px-5 py-3 text-sm font-semibold border-b-2 border-amber-400 text-amber-300 flex items-center space-x-2 transition">
+        <span>🎭</span>
+        <span>Heritage Experience Studio</span>
+      </button>
+      <button id="tab-archives-btn" onclick="switchTab('archives')" class="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition">
+        <span>🎙️</span>
+        <span>Oral Archives & Inscription Ingestion</span>
+      </button>
+      <button id="tab-translate-btn" onclick="switchTab('translate')" class="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition">
+        <span>📜</span>
+        <span>Manuscript Translator</span>
+      </button>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 1: HERITAGE EXPERIENCE STUDIO -->
+    <!-- ================================================================= -->
+    <div id="tab-stories" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Input Column -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Sample Archives Quick-Select -->
+        <div class="bg-slate-900/60 rounded-xl p-4 border border-slate-800">
+          <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-2.5">
+            ⚡ Quick-Load Sample Heritage Archives:
+          </label>
+          <div class="grid grid-cols-3 gap-2.5">
+            <button onclick="loadSample('1')" class="text-left p-2.5 rounded-lg bg-slate-800/80 hover:bg-amber-950/40 border border-slate-700/60 hover:border-amber-500/50 transition">
+              <div class="text-xs font-semibold text-slate-200">Brihadisvara Temple</div>
+              <div class="text-[11px] text-amber-400/80">Guided Tour • Chola 1010 CE</div>
+            </button>
+            <button onclick="loadSample('2')" class="text-left p-2.5 rounded-lg bg-slate-800/80 hover:bg-amber-950/40 border border-slate-700/60 hover:border-amber-500/50 transition">
+              <div class="text-xs font-semibold text-slate-200">The Burning of Nalanda</div>
+              <div class="text-[11px] text-amber-400/80">Podcast • Dharmaganja 1193 CE</div>
+            </button>
+            <button onclick="loadSample('3')" class="text-left p-2.5 rounded-lg bg-slate-800/80 hover:bg-amber-950/40 border border-slate-700/60 hover:border-amber-500/50 transition">
+              <div class="text-xs font-semibold text-slate-200">Rani Velu Nachiyar</div>
+              <div class="text-[11px] text-amber-400/80">Oral Story • Sivaganga 1780</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Manuscript / Content Input -->
+        <div class="bg-slate-900/80 rounded-xl p-5 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider">
+              📜 Historical Record, Manuscript or Oral Story Excerpt:
+            </label>
+            <span class="text-xs text-slate-500" id="char-count">0 characters</span>
+          </div>
+          <textarea id="story-content" rows="6" placeholder="Paste historical inscription notes, oral narrative excerpt, or manuscript summary here..." class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500/70 rounded-xl p-4 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition custom-scrollbar"></textarea>
+
+          <!-- Format Choice -->
+          <div>
+            <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-2">
+              Transform Into Format:
+            </label>
+            <div class="grid grid-cols-3 gap-3">
+              <label class="relative flex flex-col p-3 rounded-xl border border-slate-800 bg-slate-950/60 hover:border-amber-500/40 cursor-pointer transition">
+                <input type="radio" name="experience-format" value="tour" checked class="sr-only peer">
+                <div class="flex items-center space-x-2 text-slate-300 peer-checked:text-amber-300 mb-1">
+                  <span class="text-lg">🎧</span>
+                  <span class="text-xs font-bold">Guided Tour</span>
+                </div>
+                <span class="text-[11px] text-slate-500 peer-checked:text-slate-300">Spatial docent guide with architectural cues</span>
+                <div class="absolute inset-0 rounded-xl border-2 border-amber-400/0 peer-checked:border-amber-500/80 pointer-events-none transition"></div>
+              </label>
+
+              <label class="relative flex flex-col p-3 rounded-xl border border-slate-800 bg-slate-950/60 hover:border-amber-500/40 cursor-pointer transition">
+                <input type="radio" name="experience-format" value="podcast" class="sr-only peer">
+                <div class="flex items-center space-x-2 text-slate-300 peer-checked:text-amber-300 mb-1">
+                  <span class="text-lg">🎙️</span>
+                  <span class="text-xs font-bold">Heritage Podcast</span>
+                </div>
+                <span class="text-[11px] text-slate-500 peer-checked:text-slate-300">Engaging narrative hook, deep dive & reflection</span>
+                <div class="absolute inset-0 rounded-xl border-2 border-amber-400/0 peer-checked:border-amber-500/80 pointer-events-none transition"></div>
+              </label>
+
+              <label class="relative flex flex-col p-3 rounded-xl border border-slate-800 bg-slate-950/60 hover:border-amber-500/40 cursor-pointer transition">
+                <input type="radio" name="experience-format" value="story" class="sr-only peer">
+                <div class="flex items-center space-x-2 text-slate-300 peer-checked:text-amber-300 mb-1">
+                  <span class="text-lg">📜</span>
+                  <span class="text-xs font-bold">Dramatic Story</span>
+                </div>
+                <span class="text-[11px] text-slate-500 peer-checked:text-slate-300">Ancient chronicler evoking vivid emotions & imagery</span>
+                <div class="absolute inset-0 rounded-xl border-2 border-amber-400/0 peer-checked:border-amber-500/80 pointer-events-none transition"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Language & Voice -->
+          <div>
+            <label class="block text-xs font-semibold text-amber-300 uppercase tracking-wider mb-2">
+              Narration Language & Voice (bulbul:v3):
+            </label>
+            <select id="story-language" class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500/70 rounded-xl p-3 text-sm text-slate-200 focus:outline-none">
+              <option value="hi-IN">🇮🇳 Hindi (हिन्दी) — Voice: Anand</option>
+              <option value="en-IN">🇬🇧 English (India) — Voice: Aditya</option>
+              <option value="ta-IN">🇮🇳 Tamil (தமிழ்) — Voice: Vijay</option>
+              <option value="te-IN">🇮🇳 Telugu (తెలుగు) — Voice: Kavitha</option>
+              <option value="mr-IN">🇮🇳 Marathi (मराठी) — Voice: Rupali</option>
+              <option value="bn-IN">🇮🇳 Bengali (বাংলা) — Voice: Roopa</option>
+              <option value="kn-IN">🇮🇳 Kannada (ಕನ್ನಡ) — Voice: Gokul</option>
+              <option value="gu-IN">🇮🇳 Gujarati (ગુજરાતી) — Voice: Pooja</option>
+              <option value="pa-IN">🇮🇳 Punjabi (ਪੰਜਾਬੀ) — Voice: Anand</option>
+            </select>
+          </div>
+
+          <!-- Action Button -->
+          <button id="generate-btn" onclick="generateExperience()" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-600 via-orange-500 to-amber-500 hover:from-amber-500 hover:to-orange-400 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2 transition transform active:scale-[0.99]">
+            <span id="generate-icon">✨</span>
+            <span id="generate-label">Generate Experience & Synthesize Voice</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Output Column -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- Result Card -->
+        <div id="output-card" class="bg-slate-900/90 rounded-2xl border border-slate-800 p-6 min-h-[460px] flex flex-col justify-between shadow-xl">
+          <div>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+              <div class="flex items-center space-x-2">
+                <span class="text-xl">🎙️</span>
+                <span class="font-bold text-sm text-amber-200" id="output-title">Narration Preview</span>
+              </div>
+              <span id="output-badge" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700">Awaiting Input</span>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="hidden py-16 flex flex-col items-center justify-center text-center space-y-4">
+              <div class="w-12 h-12 border-4 border-amber-500/20 border-t-amber-400 rounded-full animate-spin"></div>
+              <div>
+                <p class="text-sm font-semibold text-amber-300" id="loading-step">Channeling the ancient chroniclers...</p>
+                <p class="text-xs text-slate-500 mt-1">Generating with sarvam-105b & synthesizing with bulbul:v3</p>
+              </div>
+            </div>
+
+            <!-- Script Display -->
+            <div id="script-container" class="space-y-4">
+              <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800/80 max-h-72 overflow-y-auto custom-scrollbar">
+                <p id="script-text" class="text-sm text-slate-300 leading-relaxed italic">
+                  Select a sample archive on the left or paste your own historical excerpt, then click "Generate Experience".
+                </p>
+              </div>
+
+              <!-- Audio Player Box -->
+              <div id="audio-player-box" class="hidden bg-gradient-to-r from-amber-950/40 via-slate-900 to-amber-900/20 border border-amber-500/30 rounded-xl p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                    <span class="text-xs font-semibold text-amber-200">Natural Voice Audio Ready</span>
+                  </div>
+                  <a id="download-audio-btn" href="#" download class="text-xs text-amber-300 hover:text-amber-100 flex items-center space-x-1 underline">
+                    <span>⬇️ Download WAV</span>
+                  </a>
+                </div>
+                <audio id="audio-player" controls class="w-full rounded-lg bg-slate-950 focus:outline-none"></audio>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Metadata -->
+          <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+            <span>Powered by Sarvam AI Indic Stack</span>
+            <button onclick="copyScript()" class="hover:text-amber-300 transition flex items-center space-x-1">
+              <span>📋</span>
+              <span>Copy Script</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: ORAL ARCHIVES INGESTION (STT) -->
+    <!-- ================================================================= -->
+    <div id="tab-archives" class="hidden space-y-6">
+      <div class="bg-slate-900/80 rounded-2xl border border-slate-800 p-8">
+        <div class="max-w-2xl mb-6">
+          <h2 class="heritage-font text-2xl font-bold text-amber-200 mb-2">Oral Archive Ingestion (Speech-to-Text)</h2>
+          <p class="text-sm text-slate-400">
+            Transcribe spoken historical folklore, oral histories, elders' testimonies, or temple chants using <strong>saaras:v3</strong> with automatic Indic language identification and timestamps.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Upload Area -->
+          <div class="border-2 border-dashed border-slate-700 hover:border-amber-500/50 rounded-xl p-8 flex flex-col items-center justify-center text-center bg-slate-950/40 transition">
+            <span class="text-4xl mb-3">🎙️</span>
+            <p class="text-sm font-semibold text-slate-200 mb-1">Upload Archive Audio File</p>
+            <p class="text-xs text-slate-500 mb-4">Supports WAV, MP3, AAC, FLAC, M4A</p>
+            <input type="file" id="archive-audio-file" accept="audio/*" class="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer">
+            <button onclick="uploadAndTranscribe()" class="mt-4 px-5 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-slate-950 text-xs font-bold transition">
+              Transcribe Oral Archive
+            </button>
+          </div>
+
+          <!-- Transcript Result -->
+          <div class="bg-slate-950 rounded-xl p-5 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-amber-300 uppercase tracking-wider">Transcription Output:</span>
+                <span id="detected-lang-badge" class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400">Waiting for audio</span>
+              </div>
+              <div id="archive-transcript-box" class="text-sm text-slate-300 leading-relaxed italic max-h-56 overflow-y-auto custom-scrollbar">
+                No audio transcribed yet. Upload an oral recording above to begin.
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800 flex justify-end">
+              <button onclick="sendTranscriptToStory()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-300 text-xs font-bold transition flex items-center space-x-1.5">
+                <span>✨ Turn this into a Heritage Story</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: MANUSCRIPT TRANSLATOR -->
+    <!-- ================================================================= -->
+    <div id="tab-translate" class="hidden space-y-6">
+      <div class="bg-slate-900/80 rounded-2xl border border-slate-800 p-8">
+        <div class="max-w-2xl mb-6">
+          <h2 class="heritage-font text-2xl font-bold text-amber-200 mb-2">Historic Manuscript Translator</h2>
+          <p class="text-sm text-slate-400">
+            Translate ancient inscriptions, palm-leaf manuscripts, and archival texts across Indic languages with <strong>mayura:v1</strong>.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-semibold text-amber-300 uppercase">Source Text:</label>
+              <select id="trans-source-lang" class="bg-slate-950 text-xs border border-slate-800 rounded px-2 py-1 text-slate-300">
+                <option value="auto">Auto-Detect</option>
+                <option value="hi-IN">Hindi</option>
+                <option value="ta-IN">Tamil</option>
+                <option value="te-IN">Telugu</option>
+                <option value="kn-IN">Kannada</option>
+                <option value="bn-IN">Bengali</option>
+                <option value="mr-IN">Marathi</option>
+                <option value="en-IN">English</option>
+              </select>
+            </div>
+            <textarea id="trans-input" rows="8" placeholder="Enter manuscript excerpt..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:border-amber-500 custom-scrollbar"></textarea>
+            <button onclick="runTranslation()" class="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs transition">
+              Translate Manuscript
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-semibold text-amber-300 uppercase">Target Translation:</label>
+              <select id="trans-target-lang" class="bg-slate-950 text-xs border border-slate-800 rounded px-2 py-1 text-slate-300">
+                <option value="hi-IN">Hindi (हिन्दी)</option>
+                <option value="en-IN" selected>English</option>
+                <option value="ta-IN">Tamil (தமிழ்)</option>
+                <option value="te-IN">Telugu (తెలుగు)</option>
+                <option value="mr-IN">Marathi (मराठी)</option>
+                <option value="bn-IN">Bengali (বাংলা)</option>
+                <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
+                <option value="gu-IN">Gujarati (ગુજરાતી)</option>
+              </select>
+            </div>
+            <div id="trans-output" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-300 min-h-[200px] overflow-y-auto custom-scrollbar">
+              Translated manuscript text will appear here.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let samples = {};
+
+    // Load samples on init
+    async function init() {
+      try {
+        const res = await fetch('/api/samples');
+        samples = await res.json();
+        // Load sample 1 by default
+        loadSample('1');
+      } catch (err) {
+        console.error('Failed to load samples:', err);
+      }
+    }
+
+    function switchTab(tabId) {
+      const tabs = ['stories', 'archives', 'translate'];
+      tabs.forEach(t => {
+        const el = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`tab-${t}-btn`);
+        if (t === tabId) {
+          el.classList.remove('hidden');
+          btn.className = 'px-5 py-3 text-sm font-semibold border-b-2 border-amber-400 text-amber-300 flex items-center space-x-2 transition';
+        } else {
+          el.classList.add('hidden');
+          btn.className = 'px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 transition';
+        }
+      });
+    }
+
+    function loadSample(key) {
+      const s = samples[key];
+      if (!s) return;
+      document.getElementById('story-content').value = s.source;
+      document.getElementById('char-count').innerText = `${s.source.length} characters`;
+
+      // Select suggested format
+      const radios = document.getElementsByName('experience-format');
+      for (const r of radios) {
+        r.checked = (r.value === s.suggested_format);
+      }
+
+      // Pre-select language for demo
+      if (key === '1') document.getElementById('story-language').value = 'hi-IN';
+      if (key === '2') document.getElementById('story-language').value = 'en-IN';
+      if (key === '3') document.getElementById('story-language').value = 'ta-IN';
+    }
+
+    document.getElementById('story-content').addEventListener('input', (e) => {
+      document.getElementById('char-count').innerText = `${e.target.value.length} characters`;
+    });
+
+    async function generateExperience() {
+      const content = document.getElementById('story-content').value.trim();
+      if (!content) {
+        alert('Please enter or select a historical excerpt.');
+        return;
+      }
+
+      const formatRadios = document.getElementsByName('experience-format');
+      let format = 'story';
+      for (const r of formatRadios) {
+        if (r.checked) format = r.value;
+      }
+
+      const language_code = document.getElementById('story-language').value;
+
+      // UI Loading State
+      const btn = document.getElementById('generate-btn');
+      const btnLabel = document.getElementById('generate-label');
+      const loadingState = document.getElementById('loading-state');
+      const scriptContainer = document.getElementById('script-container');
+      const audioBox = document.getElementById('audio-player-box');
+      const badge = document.getElementById('output-badge');
+
+      btn.disabled = true;
+      btn.classList.add('opacity-70', 'cursor-not-allowed');
+      btnLabel.innerText = 'Creating Experience with Sarvam AI...';
+      loadingState.classList.remove('hidden');
+      scriptContainer.classList.add('hidden');
+      badge.innerText = 'Processing...';
+
+      try {
+        const response = await fetch('/api/generate-experience', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content, format, language_code })
+        });
+
+        const data = await response.json();
+        if (!data.success) {
+          throw new Error(data.error || 'Failed to generate experience');
+        }
+
+        // Render result
+        document.getElementById('script-text').innerText = data.script;
+        document.getElementById('output-title').innerText = `${data.format.toUpperCase()} • ${data.language}`;
+        badge.innerText = `${data.language} Live`;
+        badge.className = 'text-[11px] px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30';
+
+        // Set Audio
+        const player = document.getElementById('audio-player');
+        player.src = data.audio_url;
+        document.getElementById('download-audio-btn').href = data.audio_url;
+        audioBox.classList.remove('hidden');
+
+        // Auto play narration
+        player.play().catch(() => {});
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove('opacity-70', 'cursor-not-allowed');
+        btnLabel.innerText = 'Generate Experience & Synthesize Voice';
+        loadingState.classList.add('hidden');
+        scriptContainer.classList.remove('hidden');
+      }
+    }
+
+    async function uploadAndTranscribe() {
+      const fileInput = document.getElementById('archive-audio-file');
+      if (!fileInput.files.length) {
+        alert('Please select an audio file first.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('audio', fileInput.files[0]);
+
+      const box = document.getElementById('archive-transcript-box');
+      const badge = document.getElementById('detected-lang-badge');
+      box.innerText = '⏳ Transcribing oral archive with saaras:v3...';
+      badge.innerText = 'Processing...';
+
+      try {
+        const res = await fetch('/api/transcribe', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error);
+
+        box.innerText = data.transcript;
+        badge.innerText = `Language: ${data.detected_language || 'Detected'}`;
+      } catch (err) {
+        box.innerText = 'Error: ' + err.message;
+      }
+    }
+
+    function sendTranscriptToStory() {
+      const transcript = document.getElementById('archive-transcript-box').innerText.trim();
+      if (!transcript || transcript.startsWith('No audio') || transcript.startsWith('Error')) {
+        alert('Please transcribe an audio archive first.');
+        return;
+      }
+      document.getElementById('story-content').value = transcript;
+      document.getElementById('char-count').innerText = `${transcript.length} characters`;
+      switchTab('stories');
+    }
+
+    async function runTranslation() {
+      const text = document.getElementById('trans-input').value.trim();
+      if (!text) return;
+      const source_language = document.getElementById('trans-source-lang').value;
+      const target_language = document.getElementById('trans-target-lang').value;
+
+      const out = document.getElementById('trans-output');
+      out.innerText = 'Translating with mayura:v1...';
+
+      try {
+        const res = await fetch('/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, source_language, target_language })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error);
+        out.innerText = data.translated_text;
+      } catch (err) {
+        out.innerText = 'Error: ' + err.message;
+      }
+    }
+
+    function copyScript() {
+      const script = document.getElementById('script-text').innerText;
+      navigator.clipboard.writeText(script).then(() => {
+        alert('Script copied to clipboard!');
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
