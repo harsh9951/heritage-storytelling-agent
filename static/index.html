@@ -54,6 +54,10 @@
       </div>
 
       <div class="flex items-center space-x-3 text-xs">
+        <div class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 shadow-sm">
+          <span>🪙</span>
+          <span>Credits: <strong id="credits-badge" class="font-mono text-amber-200 font-bold">50</strong></span>
+        </div>
         <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>Sarvam Indic Models Live</span>
@@ -361,11 +365,18 @@
 
   <script>
     let samples = {};
-
     let activeSampleKey = '1';
+    let userCredits = parseInt(localStorage.getItem('heritage_credits') || '50', 10);
+
+    function updateCreditsDisplay() {
+      const badge = document.getElementById('credits-badge');
+      if (badge) badge.innerText = userCredits;
+      localStorage.setItem('heritage_credits', userCredits.toString());
+    }
 
     // Load samples on init
     async function init() {
+      updateCreditsDisplay();
       try {
         const res = await fetch('/api/samples');
         samples = await res.json();
@@ -523,6 +534,10 @@
         if (!data.success) {
           throw new Error(data.error || 'Failed to generate experience');
         }
+
+        // Deduct credit
+        userCredits = Math.max(0, userCredits - 1);
+        updateCreditsDisplay();
 
         // Render result
         document.getElementById('script-text').innerText = data.script;
