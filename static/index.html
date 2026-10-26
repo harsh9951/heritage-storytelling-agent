@@ -54,6 +54,11 @@
       </div>
 
       <div class="flex items-center space-x-3 text-xs">
+        <button onclick="openApiKeyModal()" id="api-key-btn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          <span>🔑</span>
+          <span id="api-key-btn-label">Custom API Key</span>
+        </button>
+
         <div class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 shadow-sm transition">
           <span>🪙</span>
           <span>Credits: <strong id="credits-badge" class="font-mono text-amber-200 font-bold transition-all duration-300 inline-block">50</strong></span>
@@ -66,6 +71,46 @@
       </div>
     </div>
   </header>
+
+  <!-- API Key Modal -->
+  <div id="api-key-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-600/30 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl">🔑</span>
+          <h3 class="font-bold text-amber-200 text-base">Custom Sarvam AI Key</h3>
+        </div>
+        <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-slate-200 text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-300 leading-relaxed">
+        You can use your own Sarvam AI API subscription key. Your key is stored locally in your browser and used directly for requests. Leave empty to use the server's default key.
+      </p>
+
+      <div class="space-y-1.5">
+        <label class="block text-xs font-semibold text-amber-300 uppercase">Sarvam API Key (sk_...):</label>
+        <input type="password" id="custom-api-key-input" placeholder="sk_..." class="w-full bg-slate-950 border border-slate-800 focus:border-amber-500 rounded-xl p-3 text-xs text-slate-200 focus:outline-none font-mono">
+      </div>
+
+      <div id="custom-key-status" class="text-xs text-slate-400 italic">
+        Status: Using server's default API key.
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <button onclick="clearCustomApiKey()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">
+          Use Default Key
+        </button>
+        <div class="space-x-2">
+          <button onclick="closeApiKeyModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">
+            Cancel
+          </button>
+          <button onclick="saveCustomApiKey()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-xs text-slate-950 font-bold transition">
+            Save Key
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Main Container -->
   <main class="max-w-6xl mx-auto px-6 py-8">
@@ -368,6 +413,64 @@
     let samples = {};
     let activeSampleKey = '1';
 
+    // ------------------------------------------------------------------------
+    // Custom API Key Management
+    // ------------------------------------------------------------------------
+    function getCustomApiKey() {
+      return localStorage.getItem('custom_sarvam_api_key') || '';
+    }
+
+    function updateApiKeyButtonState() {
+      const key = getCustomApiKey();
+      const label = document.getElementById('api-key-btn-label');
+      const btn = document.getElementById('api-key-btn');
+      if (key) {
+        label.innerText = `Key: ${key.slice(0, 7)}...`;
+        btn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 transition font-medium';
+      } else {
+        label.innerText = 'Custom API Key';
+        btn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition';
+      }
+    }
+
+    function openApiKeyModal() {
+      const modal = document.getElementById('api-key-modal');
+      const input = document.getElementById('custom-api-key-input');
+      const status = document.getElementById('custom-key-status');
+      const key = getCustomApiKey();
+      input.value = key;
+      if (key) {
+        status.innerText = `Status: Using custom key (${key.slice(0, 10)}...). Unlimited generations.`;
+        status.className = 'text-xs text-emerald-400 font-medium';
+      } else {
+        status.innerText = "Status: Using server's default API key (consumes shared credits).";
+        status.className = 'text-xs text-slate-400 italic';
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closeApiKeyModal() {
+      document.getElementById('api-key-modal').classList.add('hidden');
+    }
+
+    function saveCustomApiKey() {
+      const val = document.getElementById('custom-api-key-input').value.trim();
+      if (val) {
+        localStorage.setItem('custom_sarvam_api_key', val);
+      } else {
+        localStorage.removeItem('custom_sarvam_api_key');
+      }
+      updateApiKeyButtonState();
+      closeApiKeyModal();
+    }
+
+    function clearCustomApiKey() {
+      localStorage.removeItem('custom_sarvam_api_key');
+      document.getElementById('custom-api-key-input').value = '';
+      updateApiKeyButtonState();
+      closeApiKeyModal();
+    }
+
     async function fetchLiveCredits() {
       try {
         const res = await fetch('/api/credits');
@@ -401,6 +504,7 @@
 
     // Load samples & live credits on init
     async function init() {
+      updateApiKeyButtonState();
       await fetchLiveCredits();
       setInterval(fetchLiveCredits, 4000); // Live real-time polling
       try {
@@ -550,9 +654,13 @@
       badge.innerText = 'Processing...';
 
       try {
+        const headers = { 'Content-Type': 'application/json' };
+        const customKey = getCustomApiKey();
+        if (customKey) headers['x-sarvam-api-key'] = customKey;
+
         const response = await fetch('/api/generate-experience', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ content, format, language_code })
         });
 
@@ -607,8 +715,13 @@
       badge.innerText = 'Processing...';
 
       try {
+        const headers = {};
+        const customKey = getCustomApiKey();
+        if (customKey) headers['x-sarvam-api-key'] = customKey;
+
         const res = await fetch('/api/transcribe', {
           method: 'POST',
+          headers: headers,
           body: formData
         });
         const data = await res.json();
@@ -646,9 +759,13 @@
       out.innerText = 'Translating with mayura:v1...';
 
       try {
+        const headers = { 'Content-Type': 'application/json' };
+        const customKey = getCustomApiKey();
+        if (customKey) headers['x-sarvam-api-key'] = customKey;
+
         const res = await fetch('/api/translate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ text, source_language, target_language })
         });
         const data = await res.json();

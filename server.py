@@ -21,13 +21,25 @@ if env_file.is_file():
 
 from heritage_agent import HeritageStorytellingAgent, SAMPLE_HERITAGE_ARCHIVES
 
-agent = HeritageStorytellingAgent()
+default_agent = HeritageStorytellingAgent()
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 OUTPUT_DIR = BASE_DIR / "heritage_output"
 CREDITS_FILE = BASE_DIR / "credits.json"
 OUTPUT_DIR.mkdir(exist_ok=True)
 STATIC_DIR.mkdir(exist_ok=True)
+
+
+def get_agent_for_request(request) -> tuple[HeritageStorytellingAgent, bool]:
+    """
+    Returns an agent instance:
+    - If caller sends custom 'x-sarvam-api-key', use their key.
+    - Otherwise, falls back to the server's default agent (configured with SARVAM_API_KEY).
+    """
+    custom_key = request.headers.get("x-sarvam-api-key", "").strip()
+    if custom_key:
+        return HeritageStorytellingAgent(api_key=custom_key), True
+    return default_agent, False
 
 # -----------------------------------------------------------------------------
 # Live Credits Manager
@@ -126,13 +138,17 @@ async def credits_reset_handler(request):
 async def generate_experience_handler(request):
     """Generates a story, podcast, or tour, and synthesizes audio narration."""
     try:
-        current_credits = get_live_credits()
-        if current_credits <= 0:
-            return web.json_response({
-                "success": False,
-                "error": "Insufficient credits! Please reset your live credits.",
-                "credits": 0,
-            }, status=402)
+        active_agent, is_custom = get_agent_for_request(request)
+
+        # Check credits only if using server's default shared key
+        if not is_custom:
+            current_credits = get_live_credits()
+            if current_credits <= 0:
+                return web.json_response({
+                    "success": False,
+                    "error": "Insufficient server credits! Please enter your own Sarvam API key or reset credits.",
+                    "credits": 0,
+                }, status=402)
 
         data = await request.json()
         content = data.get("content", "").strip()
@@ -143,14 +159,14 @@ async def generate_experience_handler(request):
             return web.json_response({"error": "Content is required"}, status=400)
 
         filename = f"{format_type}_{language_code}_{uuid.uuid4().hex[:8]}.wav"
-        result = agent.process_heritage_experience(
+        result = active_agent.process_heritage_experience(
             historical_content=content,
             format_type=format_type,
             target_language_code=language_code,
             output_filename=filename,
         )
 
-        remaining = deduct_live_credits(1, f"generate-{format_type}-{language_code}")
+        remaining = get_live_credits() if is_custom else deduct_live_credits(1, f"generate-{format_type}-{language_code}")
 
         return web.json_response({
             "success": True,
@@ -161,6 +177,7 @@ async def generate_experience_handler(request):
             "audio_url": f"/audio/{filename}",
             "filename": filename,
             "credits_remaining": remaining,
+            "used_custom_key": is_custom,
         })
     except Exception as e:
         return web.json_response({"success": False, "error": str(e)}, status=500)
@@ -170,13 +187,16 @@ async def generate_experience_handler(request):
 async def transcribe_handler(request):
     """Transcribes an uploaded oral archive audio file."""
     try:
-        current_credits = get_live_credits()
-        if current_credits <= 0:
-            return web.json_response({
-                "success": False,
-                "error": "Insufficient credits! Please reset your live credits.",
-                "credits": 0,
-            }, status=402)
+        active_agent, is_custom = get_agent_for_request(request)
+
+        if not is_custom:
+            current_credits = get_live_credits()
+            if current_credits <= 0:
+                return web.json_response({
+                    "success": False,
+                    "error": "Insufficient server credits! Please enter your own Sarvam API key or reset credits.",
+                    "credits": 0,
+                }, status=402)
 
         reader = await request.multipart()
         field = await reader.next()
@@ -193,8 +213,8 @@ async def transcribe_handler(request):
                     break
                 f.write(chunk)
 
-        result = agent.transcribe_oral_archive(str(temp_path))
-        remaining = deduct_live_credits(1, "transcribe-oral-archive")
+        result = active_agent.transcribe_oral_archive(str(temp_path))
+        remaining = get_live_credits() if is_custom else deduct_live_credits(1, "transcribe-oral-archive")
 
         return web.json_response({
             "success": True,
@@ -202,6 +222,7 @@ async def transcribe_handler(request):
             "detected_language": result["detected_language"],
             "timestamps": result.get("timestamps"),
             "credits_remaining": remaining,
+            "used_custom_key": is_custom,
         })
     except Exception as e:
         return web.json_response({"success": False, "error": str(e)}, status=500)
@@ -211,13 +232,16 @@ async def transcribe_handler(request):
 async def translate_handler(request):
     """Translates text across Indic languages and English."""
     try:
-        current_credits = get_live_credits()
-        if current_credits <= 0:
-            return web.json_response({
-                "success": False,
-                "error": "Insufficient credits! Please reset your live credits.",
-                "credits": 0,
-            }, status=402)
+        active_agent, is_custom = get_agent_for_request(request)
+
+        if not is_custom:
+            current_credits = get_live_credits()
+            if current_credits <= 0:
+                return web.json_response({
+                    "success": False,
+                    "error": "Insufficient server credits! Please enter your own Sarvam API key or reset credits.",
+                    "credits": 0,
+                }, status=402)
 
         data = await request.json()
         text = data.get("text", "").strip()
@@ -228,14 +252,14 @@ async def translate_handler(request):
         if not text:
             return web.json_response({"error": "Text is required"}, status=400)
 
-        translated = agent.translate_manuscript(
+        translated = active_agent.translate_manuscript(
             text=text,
             source_language_code=source_lang,
             target_language_code=target_lang,
             mode=mode,
         )
 
-        remaining = deduct_live_credits(1, f"translate-{source_lang}-to-{target_lang}")
+        remaining = get_live_credits() if is_custom else deduct_live_credits(1, f"translate-{source_lang}-to-{target_lang}")
 
         return web.json_response({
             "success": True,
@@ -243,6 +267,7 @@ async def translate_handler(request):
             "source_language": source_lang,
             "target_language": target_lang,
             "credits_remaining": remaining,
+            "used_custom_key": is_custom,
         })
     except Exception as e:
         return web.json_response({"success": False, "error": str(e)}, status=500)
