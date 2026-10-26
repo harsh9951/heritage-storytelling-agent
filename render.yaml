@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: heritage-storytelling-agent
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SARVAM_API_KEY
+        sync: false
