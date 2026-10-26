@@ -1,5 +1,5 @@
 """
-Comprehensive test suite for the Heritage Storytelling Agent website & backend.
+Integration test suite for the Heritage Storytelling Agent website & backend.
 """
 
 import sys
@@ -20,10 +20,10 @@ def test_homepage():
         with urllib.request.urlopen(f"{BASE_URL}/") as resp:
             status = resp.status
             content = resp.read().decode("utf-8")
-            has_credits = "credits-badge" in content
             has_title = "HERITAGE STORYTELLER" in content
-            passed = status == 200 and has_credits and has_title
-            log_test("Homepage (GET /)", passed, f"Status: {status}, Credits Element: {has_credits}")
+            has_custom_key = "api-key-modal" in content
+            passed = status == 200 and has_title and has_custom_key
+            log_test("Homepage (GET /)", passed, f"Status: {status}, Key Modal: {has_custom_key}")
             return passed
     except Exception as e:
         log_test("Homepage (GET /)", False, str(e))
@@ -88,7 +88,6 @@ def test_generation_and_audio():
             if not gen_passed:
                 return False
 
-            # Verify the audio URL streams correctly
             with urllib.request.urlopen(f"{BASE_URL}{audio_url}") as audio_resp:
                 audio_status = audio_resp.status
                 audio_len = len(audio_resp.read())
